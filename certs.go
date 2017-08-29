@@ -11,6 +11,8 @@ import (
 	"strings"
 	"sync"
 	"time"
+
+	"google.golang.org/appengine/urlfetch"
 )
 
 // Certificates holds a collection of public certificates that are fetched from
@@ -70,7 +72,8 @@ func download(url string, transport http.RoundTripper) (map[string]*x509.Certifi
 	if transport == nil {
 		transport = http.DefaultTransport
 	}
-	client := http.Client{Transport: transport}
+
+	client := urlfetch.Client(gaeContext)
 	resp, err := client.Get(url)
 	if err != nil {
 		return nil, 0, err

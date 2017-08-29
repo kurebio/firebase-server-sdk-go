@@ -1,6 +1,7 @@
 package firebase
 
 import (
+	"context"
 	"errors"
 	"fmt"
 	"strings"
@@ -17,6 +18,8 @@ var apps = struct {
 }{
 	m: make(map[string]*App),
 }
+
+var gaeContext context.Context
 
 // App is the entry point of the SDK.  It holds common configuration and state
 // for Firebase APIs.  Most applications don't need to directly interact with
@@ -56,7 +59,8 @@ func (app *App) isDefaultApp() bool {
 }
 
 // InitializeApp initializes the default App instance.
-func InitializeApp(o *Options) (*App, error) {
+func InitializeApp(ctx context.Context, o *Options) (*App, error) {
+	gaeContext = ctx
 	return InitializeAppWithName(o, defaultAppName)
 }
 
